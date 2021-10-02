@@ -42,5 +42,7 @@ public class PlayerActions : MonoBehaviour {
         var rightCannonball = Instantiate(cannonballPrefab, rightCannonballSpawnerPosition, Quaternion.identity);
         leftCannonball.GetComponent<Rigidbody>().AddForce((leftCannonballSpawnerPosition - transform.position) * cannonForceScale, ForceMode.VelocityChange);
         rightCannonball.GetComponent<Rigidbody>().AddForce((rightCannonballSpawnerPosition - transform.position) * cannonForceScale, ForceMode.VelocityChange);
+        leftCannonball.GetComponent<Cannonball>().SetOwnerPlayer(player);
+        rightCannonball.GetComponent<Cannonball>().SetOwnerPlayer(player);
     }
 }
