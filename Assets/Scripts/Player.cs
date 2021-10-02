@@ -15,5 +15,7 @@ public class Player : MonoBehaviour {
 
     private void PlayerDestroyed() {
         gameObject.SetActive(false);
+        // TODO play VFX and SFX
+        ScoreSystem.Instance.PlayerDestroyed(this);
     }
 }
