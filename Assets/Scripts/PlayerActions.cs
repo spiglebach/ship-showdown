@@ -8,9 +8,15 @@ public class PlayerActions : MonoBehaviour {
     [SerializeField] private float cannonForceScale;
 
     private Player player;
+    private Player enemyPlayer;
 
     private void Start() {
         player = GetComponent<Player>();
+        foreach (var otherPlayer in FindObjectsOfType<Player>()) {
+            if (otherPlayer == player) continue;
+            enemyPlayer = otherPlayer;
+            break;
+        }
     }
 
     void Update()
@@ -36,13 +42,16 @@ public class PlayerActions : MonoBehaviour {
     }
 
     private void Fire() {
-        var leftCannonballSpawnerPosition = leftCannonSpawner.position;
-        var rightCannonballSpawnerPosition = rightCannonSpawner.position;
-        var leftCannonball = Instantiate(cannonballPrefab, leftCannonballSpawnerPosition, Quaternion.identity);
-        var rightCannonball = Instantiate(cannonballPrefab, rightCannonballSpawnerPosition, Quaternion.identity);
-        leftCannonball.GetComponent<Rigidbody>().AddForce((leftCannonballSpawnerPosition - transform.position) * cannonForceScale, ForceMode.VelocityChange);
-        rightCannonball.GetComponent<Rigidbody>().AddForce((rightCannonballSpawnerPosition - transform.position) * cannonForceScale, ForceMode.VelocityChange);
-        leftCannonball.GetComponent<Cannonball>().SetOwnerPlayer(player);
-        rightCannonball.GetComponent<Cannonball>().SetOwnerPlayer(player);
+        var shipForward = Quaternion.AngleAxis(transform.rotation.eulerAngles.y, Vector3.up) * Vector3.forward;
+        var vectorToEnemy = (enemyPlayer.transform.position - transform.position).normalized;
+        var crossProduct = Vector3.Cross(shipForward, vectorToEnemy);
+        if (crossProduct.y == 0) return;
+        
+        var enemyOnRightHandSide = crossProduct.y > 0;
+        var cannonballSpawnerPosition = enemyOnRightHandSide ? rightCannonSpawner.position : leftCannonSpawner.position;
+        
+        var cannonball = Instantiate(cannonballPrefab, cannonballSpawnerPosition, Quaternion.identity);
+        cannonball.GetComponent<Rigidbody>().AddForce((cannonballSpawnerPosition - transform.position) * cannonForceScale, ForceMode.VelocityChange);
+        cannonball.GetComponent<Cannonball>().SetOwnerPlayer(player);
     }
 }
