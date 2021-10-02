@@ -128,8 +128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9084e155be125024897bf4333b894eaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceScale: 50
-  rotationScale: 3
+  forceScale: 30
+  rotationScale: 5
 --- !u!114 &3913130457467505365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,8 +160,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1390070e5a786614289c629410fc259a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wasdPlayer: 0
+  wasdPlayer: 1
   health: 100
+  ramDamage: 45
+  ramCooldown: 3
+  healthText: {fileID: 0}
 --- !u!136 &1072050684316265201
 CapsuleCollider:
   m_ObjectHideFlags: 0
