@@ -12,6 +12,8 @@ public class PlayerActions : MonoBehaviour {
     private Player player;
     private Player enemyPlayer;
 
+    private Transform cannonballParent;
+
     private void Start() {
         player = GetComponent<Player>();
         foreach (var otherPlayer in FindObjectsOfType<Player>()) {
@@ -19,6 +21,7 @@ public class PlayerActions : MonoBehaviour {
             enemyPlayer = otherPlayer;
             break;
         }
+        cannonballParent = GameObject.FindWithTag("CannonballParent").transform;
     }
 
     void Update()
@@ -57,6 +60,7 @@ public class PlayerActions : MonoBehaviour {
             var cannonball = Instantiate(cannonballPrefab, cannon.position, Quaternion.identity);
             cannonball.GetComponent<Rigidbody>().AddForce((cannonballForceTargetVector - transform.position) * cannonForceScale, ForceMode.VelocityChange);
             cannonball.GetComponent<Cannonball>().SetOwnerPlayer(player);
+            cannonball.transform.SetParent(cannonballParent);
         }
     }
 }

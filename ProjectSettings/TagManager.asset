@@ -8,6 +8,7 @@ TagManager:
   - WasdScore
   - ArrowScore
   - RoundOverCanvas
+  - CannonballParent
   layers:
   - Default
   - TransparentFX
