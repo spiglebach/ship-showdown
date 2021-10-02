@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour {
 
     void Start() {
         playerRigidbody = GetComponent<Rigidbody>();
+        playerRigidbody.sleepThreshold = 0;
         player = GetComponent<Player>();
     }
 

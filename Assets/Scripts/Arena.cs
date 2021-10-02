@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Arena : MonoBehaviour {
     [SerializeField] private float secondsToShrink = 60f;
-    [SerializeField][Range(0.5f, 1f)] private float shrinkToPercent = .2f;
+    [SerializeField][Range(0.05f, 1f)] private float shrinkToPercent = .2f;
     
     private float shrinkScale;
     private float shrinkThreshold;
