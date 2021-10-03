@@ -1,9 +1,9 @@
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class OverlayManager : MonoBehaviour {
-    [SerializeField] private Text wasdPlayerScoreText; // TODO use TextMeshPro
-    [SerializeField] private Text arrowPlayerScoreText; // TODO use TextMeshPro
+    [SerializeField] private TMP_Text wasdPlayerScoreText;
+    [SerializeField] private TMP_Text arrowPlayerScoreText;
     [SerializeField] private GameObject roundOverCanvas;
     
     void Start() {

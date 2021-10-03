@@ -12,18 +12,18 @@ public class Arena : MonoBehaviour {
     private float shrinkAmount;
 
     private void Start() {
-        var rightWallPosition = rightWall.transform.position;
+        var rightWallPosition = rightWall.transform.localPosition;
         shrinkAmount = (rightWallPosition.x - shrinkThreshold) / secondsToShrink;
     }
 
     void Update() {
-        if (leftWall.transform.position.x < -shrinkThreshold)
+        if (leftWall.transform.localPosition.x < -shrinkThreshold)
             leftWall.transform.Translate(shrinkAmount * Time.deltaTime, 0, 0, Space.World);
-        if (rightWall.transform.position.x > shrinkThreshold)
+        if (rightWall.transform.localPosition.x > shrinkThreshold)
             rightWall.transform.Translate(-shrinkAmount * Time.deltaTime, 0, 0, Space.World);
-        if (topWall.transform.position.z > shrinkThreshold)
+        if (topWall.transform.localPosition.z > shrinkThreshold)
             topWall.transform.Translate(0, 0, -shrinkAmount * Time.deltaTime, Space.World);
-        if (bottomWall.transform.position.z < -shrinkThreshold)
+        if (bottomWall.transform.localPosition.z < -shrinkThreshold)
             bottomWall.transform.Translate(0, 0, shrinkAmount * Time.deltaTime, Space.World);
     }
 }

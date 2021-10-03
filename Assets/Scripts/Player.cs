@@ -1,19 +1,24 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
     [SerializeField] private bool wasdPlayer;
-    [SerializeField] private int health = 100;
+    [SerializeField] private int maxHealth = 100;
     [SerializeField] private int ramDamage = 45;
     [SerializeField] private float ramCooldown = 3f;
 
-    [SerializeField] private Text healthText; // TODO use TextMeshPro
+    [SerializeField] private Slider healthSlider;
 
     public bool WasdPlayer => wasdPlayer;
     
     private float remainingRamCooldown;
+    private int remainingHealth;
+    private TMP_Text healthText;
 
     private void Start() {
+        remainingHealth = maxHealth;
+        healthText = healthSlider.gameObject.GetComponentInChildren<TMP_Text>();
         DisplayHealth();
     }
 
@@ -22,8 +27,8 @@ public class Player : MonoBehaviour {
     }
 
     public void TakeDamage(int amount) {
-        health -= amount;
-        if (health <= 0) {
+        remainingHealth -= amount;
+        if (remainingHealth <= 0) {
             PlayerDestroyed();
             
         }
@@ -43,6 +48,7 @@ public class Player : MonoBehaviour {
     }
 
     private void DisplayHealth() {
-        healthText.text = health <= 0 ? "X_X" : health.ToString();
+        healthText.text = remainingHealth <= 0 ? "X_X" : remainingHealth.ToString();
+        healthSlider.value = remainingHealth * 1f / maxHealth;
     }
 }
