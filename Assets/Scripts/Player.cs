@@ -15,8 +15,10 @@ public class Player : MonoBehaviour {
     private float remainingRamCooldown;
     private int remainingHealth;
     private TMP_Text healthText;
+    private AudioSource audioSource;
 
     private void Start() {
+        audioSource = GetComponent<AudioSource>();
         remainingHealth = maxHealth;
         healthText = healthSlider.gameObject.GetComponentInChildren<TMP_Text>();
         DisplayHealth();
@@ -27,28 +29,29 @@ public class Player : MonoBehaviour {
     }
 
     public void TakeDamage(int amount) {
+        if (ScoreSystem.Instance.IsGameOver) return;
         remainingHealth -= amount;
         if (remainingHealth <= 0) {
             PlayerDestroyed();
-            
         }
         DisplayHealth();
     }
 
     private void PlayerDestroyed() {
-        gameObject.SetActive(false);
-        // TODO play VFX and SFX
+        GetComponentInChildren<Renderer>().enabled = false;
+        if (audioSource) audioSource.Play();
         ScoreSystem.Instance.PlayerDestroyed(this);
     }
 
     private void OnCollisionEnter(Collision other) {
         if (remainingRamCooldown > 0 || !other.gameObject.TryGetComponent(out Player otherPlayer)) return;
         otherPlayer.TakeDamage(ramDamage);
+        if (audioSource) audioSource.Play();
         remainingRamCooldown = ramCooldown;
     }
 
     private void DisplayHealth() {
-        healthText.text = remainingHealth <= 0 ? "X_X" : remainingHealth.ToString();
+        healthText.text = remainingHealth <= 0 ? "X_X" : $"{remainingHealth.ToString()}/{maxHealth.ToString()}";
         healthSlider.value = remainingHealth * 1f / maxHealth;
     }
 }

@@ -6,6 +6,9 @@ public class ScoreSystem : MonoBehaviour {
     private int wasdPlayerScore = 0;
     private int arrowPlayerScore = 0;
 
+    private bool gameOver = false;
+    public bool IsGameOver => gameOver;
+
     public int WasdPlayerScore => wasdPlayerScore;
     public int ArrowPlayerScore => arrowPlayerScore;
 
@@ -25,5 +28,20 @@ public class ScoreSystem : MonoBehaviour {
             wasdPlayerScore++;
         }
         FindObjectOfType<OverlayManager>().GameOver(this);
+        Invoke(nameof(SetGameOver), 0.1f);
+    }
+
+    private void SetGameOver() {
+        gameOver = true;
+    }
+    
+    public void ClearGameOver() {
+        gameOver = false;
+    }
+
+    public void ClearScore() {
+        ClearGameOver();
+        wasdPlayerScore = 0;
+        arrowPlayerScore = 0;
     }
 }
