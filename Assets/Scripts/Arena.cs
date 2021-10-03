@@ -3,25 +3,28 @@ using UnityEngine;
 public class Arena : MonoBehaviour {
     [SerializeField] private float secondsToShrink = 60f;
     [SerializeField][Range(0.05f, 1f)] private float shrinkToPercent = .2f;
+    [SerializeField] private float shrinkThreshold = 10;
     
-    private float shrinkScale;
-    private float shrinkThreshold;
+    [SerializeField] private GameObject leftWall;
+    [SerializeField] private GameObject rightWall;
+    [SerializeField] private GameObject topWall;
+    [SerializeField] private GameObject bottomWall;
+    
+    private float shrinkAmount;
 
     private void Start() {
-        var localScale = transform.localScale;
-        shrinkThreshold = localScale.x * shrinkToPercent;
-        shrinkScale = (localScale.x - shrinkThreshold) / secondsToShrink;
+        var rightWallPosition = rightWall.transform.position;
+        shrinkAmount = (rightWallPosition.x - shrinkThreshold) / secondsToShrink;
     }
 
     void Update() {
-        var localScale = transform.localScale;
-        if (localScale.x > shrinkThreshold) {
-            localScale.x = Mathf.Clamp(localScale.x - shrinkScale * Time.deltaTime, shrinkThreshold, float.MaxValue);
-        }
-
-        if (localScale.z > shrinkThreshold) {
-            localScale.z = Mathf.Clamp(localScale.z - shrinkScale * Time.deltaTime, shrinkThreshold, float.MaxValue);
-        }
-        transform.localScale = localScale;
+        if (leftWall.transform.position.x < -shrinkThreshold)
+            leftWall.transform.Translate(shrinkAmount * Time.deltaTime, 0, 0, Space.World);
+        if (rightWall.transform.position.x > shrinkThreshold)
+            rightWall.transform.Translate(-shrinkAmount * Time.deltaTime, 0, 0, Space.World);
+        if (topWall.transform.position.z > shrinkThreshold)
+            topWall.transform.Translate(0, 0, -shrinkAmount * Time.deltaTime, Space.World);
+        if (bottomWall.transform.position.z < -shrinkThreshold)
+            bottomWall.transform.Translate(0, 0, shrinkAmount * Time.deltaTime, Space.World);
     }
 }
