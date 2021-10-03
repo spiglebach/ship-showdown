@@ -148,6 +148,8 @@ MonoBehaviour:
   leftCannons: {fileID: 6166212368009003669}
   rightCannons: {fileID: 1792017567437545358}
   cannonballPrefab: {fileID: 3710584764002900196, guid: 80a7140e13db0e24ea25358f7fc88725, type: 3}
+  cannonballReplenishmentTimeInSeconds: 1
+  cannonballDisplayCollection: {fileID: 0}
   cannonForceScale: 30
 --- !u!114 &4866750030902561500
 MonoBehaviour:
@@ -162,8 +164,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wasdPlayer: 1
-  maxHealth: 150
-  ramDamage: 50
+  maxHealth: 100
+  ramDamage: 30
   ramCooldown: 2
   healthSlider: {fileID: 0}
 --- !u!136 &1072050684316265201

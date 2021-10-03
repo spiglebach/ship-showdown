@@ -7,6 +7,8 @@ public class PlayerActions : MonoBehaviour {
     [SerializeField] private Transform leftCannons;
     [SerializeField] private Transform rightCannons;
     [SerializeField] private GameObject cannonballPrefab;
+    [SerializeField] private float cannonballReplenishmentTimeInSeconds = 1f;
+    [SerializeField] private Transform cannonballDisplayCollection;
 
     [SerializeField] private float cannonForceScale;
 
@@ -14,6 +16,9 @@ public class PlayerActions : MonoBehaviour {
     private Player enemyPlayer;
 
     private Transform cannonballParent;
+    private int maxCannonballs;
+    private int availableCannonballs;
+    private float remainingCannonballReplenishmentTime;
 
     private void Start() {
         player = GetComponent<Player>();
@@ -23,9 +28,19 @@ public class PlayerActions : MonoBehaviour {
             break;
         }
         cannonballParent = GameObject.FindWithTag("CannonballParent").transform;
+        maxCannonballs = leftCannons.childCount;
+        availableCannonballs = maxCannonballs;
+        DisplayCannonballs();
     }
 
     void Update() {
+        if (ScoreSystem.Instance.IsGameOver) return;
+        remainingCannonballReplenishmentTime -= Time.deltaTime;
+        if (remainingCannonballReplenishmentTime < 0) {
+            availableCannonballs = Mathf.Clamp(++availableCannonballs, 0, maxCannonballs);
+            remainingCannonballReplenishmentTime += cannonballReplenishmentTimeInSeconds;
+            DisplayCannonballs();
+        }
         if (player.WasdPlayer) {
             ProcessWasdPlayerInput();
         } else {
@@ -57,9 +72,14 @@ public class PlayerActions : MonoBehaviour {
         var forceVector = cannonballForceTargetVector - transform.position;
         var cannons = enemyOnRightHandSide ? rightCannons : leftCannons;
 
+        var cannonballIndex = 0;
         foreach (Transform cannon in cannons) {
+            if (cannonballIndex >= availableCannonballs) break;
             StartCoroutine(SpawnCannonballWithDelay(cannon.position, forceVector));
+            cannonballIndex++;
         }
+        availableCannonballs = 0;
+        DisplayCannonballs();
     }
 
     private IEnumerator SpawnCannonballWithDelay(Vector3 cannonPosition, Vector3 forceVector) {
@@ -68,5 +88,12 @@ public class PlayerActions : MonoBehaviour {
         cannonball.GetComponent<Rigidbody>().AddForce(forceVector * cannonForceScale, ForceMode.VelocityChange);
         cannonball.GetComponent<Cannonball>().SetOwnerPlayer(player);
         cannonball.transform.SetParent(cannonballParent);
+    }
+
+    private void DisplayCannonballs() {
+        for (var i = 0; i < cannonballDisplayCollection.childCount; i++) {
+            var cannonballDisplay = cannonballDisplayCollection.GetChild(i).gameObject;
+            cannonballDisplay.SetActive(i < availableCannonballs);
+        }
     }
 }
